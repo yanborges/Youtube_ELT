@@ -1,7 +1,8 @@
 import requests 
 import json
-
 import os 
+
+from datetime import date
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path="./.env")
@@ -127,10 +128,19 @@ def extract_video_data(video_ids):
         print(f"An error occurred while fetching video data: {e}")
         return None
 
+def save_to_json(extracted_data):
+    file_path = f"./data/video_data_{date.today()}.json"
+
+    with open(file_path, "w", encoding="utf-8") as json_file:
+        json.dump(extracted_data, json_file, ensure_ascii=False, indent=4)
+
+
 if __name__ == "__main__":
     playlistId = get_playlist_id()
     video_ids = get_video_ids(playlistId)
-    extract_video_data(video_ids)
+    video_data = extract_video_data(video_ids)
+    save_to_json(video_data)
+     
 
 
 
